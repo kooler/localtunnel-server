@@ -1,12 +1,33 @@
 # localtunnel-server
 
-[![Build Status](https://travis-ci.org/localtunnel/server.svg?branch=master)](https://travis-ci.org/localtunnel/server)
-
 localtunnel exposes your localhost to the world for easy testing and sharing! No need to mess with DNS or deploy just to have others test out your changes.
 
 This repo is the server component. If you are just looking for the CLI localtunnel app, see (https://github.com/localtunnel/localtunnel).
 
-## overview ##
+
+## About this fork
+
+Fork of the original localtunnel-server (which seems to be abandoned) allowing to specify port range for client connection.
+
+By default localtunnel server will assign random port to the incoming connection. That desn't work well if you have firewall in front of it (you should) as you can't limit amount of open ports.
+
+This fork fixes it, it allows specifying min-port/max-port arguments that define port boundaries.
+
+Example of running it in docker-compose.yml:
+```yaml
+services:
+  localtunnel:
+    image: kooler/localtunnel-server:latest
+    command: bin/server --port 3000 --domain tunnels.yourdomain.com --min-port=2000 --max-port=2100
+    restart: always
+    ports:
+      - '3000:3000'
+      - '2000-2100:2000-2100'
+```
+
+Make sure to open ports 2000-2100 on your firewall.
+
+## Original overview ##
 
 The default localtunnel client connects to the `localtunnel.me` server. You can, however, easily set up and run your own server. In order to run your own localtunnel server you must ensure that your server can meet the following requirements:
 
